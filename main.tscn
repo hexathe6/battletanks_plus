@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://nh5hqeh1ch2n"]
+[gd_scene load_steps=6 format=3 uid="uid://nh5hqeh1ch2n"]
 
 [ext_resource type="PackedScene" uid="uid://uc63anhbehy5" path="res://levels/level_001.tscn" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dja1l351ewwmf" path="res://ui/bullet_counts.gd" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://bve8xo3ucpvnu" path="res://ui/health.gd" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://byovtk1uo5sqx" path="res://health_icon.png" id="4_7mycd"]
+[ext_resource type="Texture2D" uid="uid://wpjwyg7mwu7p" path="res://health_bar.png" id="5_272bh"]
 
 [node name="main" type="Node"]
 
@@ -11,3 +14,35 @@
 offset_right = 215.0
 offset_bottom = 64.0
 script = ExtResource("2_1bvp3")
+
+[node name="health" type="VBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+script = ExtResource("3_lquwl")
+
+[node name="health_count" type="HBoxContainer" parent="health"]
+layout_mode = 2
+
+[node name="health_icon" type="TextureRect" parent="health/health_count"]
+layout_mode = 2
+texture = ExtResource("4_7mycd")
+
+[node name="health_amt" type="Label" parent="health/health_count"]
+layout_mode = 2
+
+[node name="health_bar_container" type="Panel" parent="health"]
+layout_mode = 2
+
+[node name="health_bar" type="NinePatchRect" parent="health/health_bar_container"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 18.0
+texture = ExtResource("5_272bh")
+region_rect = Rect2(4, 0, 55, 18)
+patch_margin_left = 4
+patch_margin_right = 4
+axis_stretch_horizontal = 1

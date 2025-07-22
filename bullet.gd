@@ -1,4 +1,5 @@
 extends Area2D
+class_name Bullet
 
 @export var player : int
 @export var rot : float
