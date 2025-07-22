@@ -81,7 +81,6 @@ func _process(delta):
 	if(Input.is_action_just_released("left")): movkey_unpush(-PI/2)
 	if(Input.is_action_just_released("right")): movkey_unpush(PI/2)
 	if(moving and state == "alive"):
-		print(movkey_calc())
 		do_rotate(movkey_calc(),rot)
 		move(0,-speed)
 	
