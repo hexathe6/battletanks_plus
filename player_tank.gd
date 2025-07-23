@@ -34,6 +34,7 @@ func shoot(type):
 
 var player = 0
 var speed = 2
+var speed_mult = 1
 var rot = 0.05
 var bullet = global.bullet_enum_[0]
 var health : float = 3
@@ -65,8 +66,7 @@ func movkey_calc():
 	if moving_keys == [null,null]: return 0
 	if moving_keys[0] == null: return moving_keys[1]
 	if moving_keys[1] == null: return moving_keys[0]
-	return lerp_angle(moving_keys[0],moving_keys[1],0.5) *\
-		1#abs(Vector2(0,-1).rotated(moving_keys[0]).dot(Vector2(0,-1).rotated(moving_keys[1])))
+	return lerp_angle(moving_keys[0],moving_keys[1],0.5)
 var moving_dir = 0.0
 func _process(delta):
 	moving = false
@@ -82,7 +82,7 @@ func _process(delta):
 	if(Input.is_action_just_released("right")): movkey_unpush(PI/2)
 	if(moving and state == "alive"):
 		do_rotate(movkey_calc(),rot)
-		move(0,-speed)
+		move(0,-speed*speed_mult)
 	
 	if(Input.is_action_pressed("one")):
 		bullet = global.bullet_enum_[0]
@@ -92,17 +92,16 @@ func _process(delta):
 	if(Input.is_action_just_pressed("shoot")):
 		shoot(bullet)
 	
-	for i in $detector.get_overlapping_bodies():
-		if i is TileMapLayer:
-			var x : float = 0
-			@warning_ignore("confusable_local_declaration")
-			var xf = func(x,y):
-					if x > 0:
-						return x
-					else:
-						return y
-			x = xf.call(x,global.get_data_at_tile(position + Vector2(-64,0),"health_drain"))
-			x = xf.call(x,global.get_data_at_tile(position + Vector2(64,0),"health_drain"))
-			x = xf.call(x,global.get_data_at_tile(position + Vector2(0,-64),"health_drain"))
-			x = xf.call(x,global.get_data_at_tile(position + Vector2(0,64),"health_drain"))
-			remove_health(x * delta)
+	var x : float = 0
+	@warning_ignore("confusable_local_declaration")
+	var xf = func(x,y):
+			if x > 0:
+				return x
+			else:
+				return y
+	x = xf.call(x,global.get_data_at_tile(position + Vector2(-64,0),"health_drain"))
+	x = xf.call(x,global.get_data_at_tile(position + Vector2(64,0),"health_drain"))
+	x = xf.call(x,global.get_data_at_tile(position + Vector2(0,-64),"health_drain"))
+	x = xf.call(x,global.get_data_at_tile(position + Vector2(0,64),"health_drain"))
+	remove_health(x * delta)
+	speed_mult = global.get_data_at_tile(position,"speed")
